@@ -1,0 +1,3 @@
+2024-04-19 17:11:49,304:ERROR:Ошибка при добавлении транзакции: list index out of range
+2024-04-19 17:56:55,425:ERROR:Ошибка при добавлении транзакции: list index out of range
+2024-04-19 18:23:52,802:ERROR:Ошибка при добавлении транзакции: NOT NULL constraint failed: transactions.amount
