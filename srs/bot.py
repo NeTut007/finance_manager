@@ -119,7 +119,7 @@ def choose_amount(message:types.Message, chat_id):
 def Echo(message):
     bot.reply_to(message, 'Такого нету😁')
 
-def hello():
+
 
 
 
