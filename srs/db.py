@@ -2,12 +2,13 @@ import sqlite3
 import os
 import logging
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, '..', 'bot.db')
-LOG_PATH = os.path.join(BASE_DIR, '..', 'database_errors.log')
+DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'bot.db')
+LOG_PATH = os.path.join(os.path.dirname(__file__), '..', 'database_errors.log')
 
 logging.basicConfig(filename=LOG_PATH, level=logging.ERROR, 
                     format='%(asctime)s:%(levelname)s:%(message)s')
+
+# функция для создания таблиц
 def create_db():
     try:
         connection = sqlite3.connect(DB_PATH)
@@ -46,21 +47,25 @@ def create_db():
     finally:
         connection.close()
 
+# функция для удаления таблиц
 def drop_tables():
     try:
         connection = sqlite3.connect(DB_PATH)
         cursor = connection.cursor()
         delete_table_transaction = 'DROP TABLE IF EXISTS transactions'
         delete_table_budgets = 'DROP TABLE IF EXISTS budgets'
+        delete_table_users = 'DROP TABLE IF EXISTS users'
         cursor.execute(delete_table_budgets)
         cursor.execute(delete_table_transaction)
+        cursor.execute(delete_table_users)
         connection.commit()
     except Exception as error:
         logging.error(f'Ошибка при удалении таблицы: {error}')
     finally:
         connection.close()
 
-def create_transactions(category, date, amount):
+# функция для создания транзакций
+def create_transactions(amount, category, date):
     try:
         connection = sqlite3.connect(DB_PATH)
         cursor = connection.cursor()
@@ -72,6 +77,7 @@ def create_transactions(category, date, amount):
     finally:
         connection.close()
 
+# функция для просмтра всех транзакций
 def get_transactions():
     try:
         connection = sqlite3.connect(DB_PATH)
@@ -85,6 +91,7 @@ def get_transactions():
     finally:
         connection.close()
 
+# функция для удаления транзакций
 def delete_transactions(transaction_id):
     try:
         connection=sqlite3.connect(DB_PATH)
@@ -96,6 +103,7 @@ def delete_transactions(transaction_id):
     finally:
         connection.close()
 
+# функция для изменения транзакций
 def update_transactions(transaction_id, amount = None, date = None , category = None):
     try:
         connection = sqlite3.connect(DB_PATH)
@@ -112,6 +120,7 @@ def update_transactions(transaction_id, amount = None, date = None , category = 
     finally:
         connection.close()
 
+# функция для просмотра бюджетов
 def get_budgets():
     try:
         connection = sqlite3.connect(DB_PATH)
@@ -125,6 +134,7 @@ def get_budgets():
     finally:
         connection.close()
 
+# функция для удаления бюджетов
 def delete_budgets(budget_id):
     try:
         connection=sqlite3.connect(DB_PATH)
@@ -136,6 +146,7 @@ def delete_budgets(budget_id):
     finally:
         connection.close()
 
+# функция для изменения бюджета 
 def update_budgets(budget_id, amount = None, category = None):
     try:
         connection = sqlite3.connect(DB_PATH)
@@ -150,6 +161,7 @@ def update_budgets(budget_id, amount = None, category = None):
     finally:
         connection.close()
 
+# функция для установки бюджета 
 def set_budgets(category, amount):
     try:
         connection = sqlite3.connect(DB_PATH)

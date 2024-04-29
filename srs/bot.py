@@ -20,17 +20,17 @@ def send_welcome(message:types.Message):
 def send_help(message):
     help_text = """
     Доступные команды:
-    /start - начать работу с ботом🐱‍🐉
-    /help - получить список доступных команд😜
-    /add_transaction - добавить новую транзакцию (формат: /add сумма категория [дата])😎
-    /show_transaction - показать все транзакции👍
-    /balance - отобразить текущий баланс😊
-    /delete - удалить транзакцию по ID (формат: /delete ID)🌹
-    /update - обновить транзакцию (формат: /update ID сумма категория дата)❤
-    /set_budget - установить бюджет (формат: /setbudget категория сумма)✔
-    /show_budgets - показать все бюджеты👀
-    /update_budget - обновить бюджет (формат: /updatebudget ID сумма)😢
-    /info_user - инфа о пользователе🎁
+/start - начать работу с ботом🐱‍🐉
+/help - получить список доступных команд😜
+/add_transaction - добавить новую транзакцию 😎
+/show_transaction - показать все транзакции👍
+/balance - отобразить текущий баланс😊
+/delete - удалить транзакцию по ID 🌹
+/update - обновить транзакцию ❤
+/set_budget - установить бюджет ✔
+/show_budgets - показать все бюджеты👀
+/update_budget - обновить бюджет 😢
+/info_user - инфа о пользователе🎁
     """
     bot.reply_to(message, help_text)
 
@@ -62,86 +62,87 @@ def choose_category(message:types.Message):
         logging.error(f'Пожалуста введите числовое значение для суммы: {error}')
         am = bot.send_message(
             chat_id=message.chat.id,
-            text='Введите категорию транзакции'
+            text='Введите числовое значение для суммы '
         )
         bot.register_next_step_handler(am, choose_category)
 
 def category_step(message:types.Message, amount):
     category = message.text
-    bot.send_message(
-        chat_id=message.chat.id,
-        text='Транзакция будет добавлена с вашей датой'
-    )
     add_transaction(message, amount, category)
   
 def add_transaction(message:types.Message, amount, category):
     try:
-        date = datetime.now().strftime("%Y-%m-%d")
-        db.create_transactions(amount, date , category) 
+        months = {
+            'January': 'января', 'February': 'февраля', 'March': 'марта',
+            'April': 'апреля', 'May': 'мая', 'June': 'июня',
+            'July': 'июля', 'August': 'августа', 'September': 'сентября',
+            'October': 'октября', 'November': 'ноября', 'December': 'декабря'
+        }
+        now = datetime.now()
+        month = months[now.strftime('%B')].capitalize() 
+        date = now.strftime(f'%d {month} %Y, %H:%M')
+        db.create_transactions(amount, category, date) 
         bot.send_message(message.chat.id, 'Транзакция добавлена(☞ﾟヮﾟ)☞')
     except Exception as error:
         logging.error(f'Ошибка при добавлении транзакции: {error}')
         bot.send_message(message.chat.id, 'Не верный формат даты')
 
-@bot.message_handler(commands=['set_budget'])
-    
-def choose_category(message:types.Message):
-    try:
-        am = bot.send_message(
-            chat_id=message.chat.id,
-            text='Введите категорию бюджета '
-        )
-        bot.register_next_step_handler(message, category_step, am)
-    except Exception as error:
-        logging.error(f'Пожалуста введите числовое значение для суммы: {error}')
-        am = bot.send_message(
-            chat_id=message.chat.id,
-            text='Введите категорию бюджета'
-        )
-        bot.register_next_step_handler(message, choose_category,am )
-
-def category_step(message:types.Message, chat_id):
-    category = message.text
-    bot.send_message(
-        chat_id=chat_id,
-        text='Выбрана категория для бюджета'
+@bot.message_handler(commands=['set_budget'])   
+def set_budget_category(message:types.Message):
+    am = bot.send_message(
+        chat_id=message.chat.id,
+        text='Введите категорию бюджета '
     )
-    bot.register_next_step_handler(message, choose_amount, category)
-
-def choose_amount(message:types.Message, chat_id):
-    am=bot.send_message(
-        chat_id=chat_id,
+    bot.register_next_step_handler(am, set_budget_amount)
+    
+def set_budget_amount(message:types.Message):
+    category = message.text
+    am = bot.send_message(
+        chat_id = message.chat.id,
         text='Введите сумму для бюджета'
     )
-    bot.register_next_step_handler(message, choose_step, am)
+    bot.register_next_step_handler(am, set_budget_final, category)
 
-def choose_step(message:types.Message, category):
+def set_budget_final(message:types.Message, category):
     try:
         amount = float(message.text)
         if amount < 0:
-            bot.send_message(
+            am = bot.send_message(
                 chat_id=message.chat.id,
                 text=f'Вы ввели отрицательную сумму: {amount} бюджета, попробуйте написать еще раз '
             )
-            bot.register_next_step_handler(message, choose_amount)
+            bot.register_next_step_handler(am, set_budget_final, category)
         else:
             db.set_budgets(category, amount)
             bot.send_message(
                 chat_id=message.chat.id,
-                text=f'Бюджет создан, у вас есть {amount} рублей для {category}'
+                text=f'Бюджет создан, у вас есть {amount} рублей на {category}'
             )
     except Exception as error:
         logging.error(f'Был использован не правильный тип данных: {error}')
-        bot.send_message(
+        am = bot.send_message(
             chat_id=message.chat.id,
-            text=f'Больше сюда не пишите, не будь ишаком 😢'
+            text=f'Нужны числа, а не текст'
         )
-        bot.register_next_step_handler(message, choose_amount)
+        bot.register_next_step_handler(am, set_budget_final, category)
         
 @bot.message_handler(commands=['show_transaction'])
 def show_transaction(message:types.Message):
     transactions = db.get_transactions()
-    bot.send_message(message.chat.id, transactions) 
+    if transactions:
+        response = 'Список всех транзакций: \n'
+        for transaction in transactions:
+            transaction = list(transaction)
+            response += f'ID: {transaction[0]} amount:{transaction[1]} category: {transaction[2]}, date: {transaction[3]}\n'
+        bot.send_message(
+            chat_id=message.chat.id,
+            text=response
+        )
+    else:
+        bot.send_message(
+            chat_id=message.chat.id,
+            text=f'Нет транзакций🎂'
+        )
 
 
 

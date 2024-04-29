@@ -1,8 +1,57 @@
-2024-04-19 17:11:49,304:ERROR:Ошибка при добавлении транзакции: list index out of range
-2024-04-19 17:56:55,425:ERROR:Ошибка при добавлении транзакции: list index out of range
-2024-04-19 18:23:52,802:ERROR:Ошибка при добавлении транзакции: NOT NULL constraint failed: transactions.amount
-2024-04-26 18:51:30,394:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: chat not found
-2024-04-26 18:51:30,396:ERROR:Exception traceback:
+2024-04-29 16:28:08,082:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+2024-04-29 16:28:08,084:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 93, in run
+    task(*args, **kwargs)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 8404, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 144, in show_transaction
+    bot.send_message(message.chat.id, transactions)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1742, in send_message
+    apihelper.send_message(
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 270, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 167, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 194, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+
+2024-04-29 16:30:15,266:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+2024-04-29 16:30:15,267:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 93, in run
+    task(*args, **kwargs)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 8404, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 144, in show_transaction
+    bot.send_message(message.chat.id, transactions)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1742, in send_message
+    apihelper.send_message(
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 270, in send_message
+    return _make_request(token, method_url, params=payload, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 167, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 194, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: message text is empty
+
+2024-04-29 16:30:59,050:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: chat not found
+2024-04-29 16:30:59,051:ERROR:Exception traceback:
 Traceback (most recent call last):
   File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
     self.worker_pool.raise_exceptions()
@@ -24,26 +73,5 @@ Traceback (most recent call last):
     raise ApiTelegramException(method_name, result, result_json)
 telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: chat not found
 
-2024-04-26 18:52:12,153:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: chat not found
-2024-04-26 18:52:12,155:ERROR:Exception traceback:
-Traceback (most recent call last):
-  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
-    self.worker_pool.raise_exceptions()
-  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 150, in raise_exceptions
-    raise self.exception_info
-  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 93, in run
-    task(*args, **kwargs)
-  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 105, in category_step
-    bot.send_message(
-  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1742, in send_message
-    apihelper.send_message(
-  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 270, in send_message
-    return _make_request(token, method_url, params=payload, method='post')
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 167, in _make_request
-    json_result = _check_result(method_name, result)
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 194, in _check_result
-    raise ApiTelegramException(method_name, result, result_json)
-telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: chat not found
-
+2024-04-29 17:18:55,974:ERROR:Был использован не правильный тип данных: could not convert string to float: 'jkj'
+2024-04-29 17:19:06,189:ERROR:Был использован не правильный тип данных: could not convert string to float: '/set_budget'
