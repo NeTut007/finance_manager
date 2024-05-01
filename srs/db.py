@@ -104,7 +104,7 @@ def delete_transactions(transaction_id):
         connection.close()
 
 # функция для изменения транзакций
-def update_transactions(transaction_id, amount = None, date = None , category = None):
+def update_transactions(transaction_id, amount = None, category = None):
     try:
         connection = sqlite3.connect(DB_PATH)
         cursor = connection.cursor()
@@ -112,8 +112,6 @@ def update_transactions(transaction_id, amount = None, date = None , category = 
             cursor.execute('UPDATE transactions SET amount = ? WHERE id = ?', (amount, transaction_id))
         if category:
             cursor.execute('UPDATE transactions SET category = ? WHERE id = ?', (category, transaction_id))
-        if date:
-            cursor.execute('UPDATE transcations SET date = ? WHERE id = ?', (date, transaction_id))
         connection.commit()
     except Exception as error:
         logging.error(f'Ошибка при  обновлении : {error}')
@@ -196,6 +194,33 @@ def insert_user(username:str, user_id:int):
             connection.commit()
     finally:
         connection.close()
+
+# функция для проверки id транзакции
+def check_id_trasaction(id_transaction):
+    try:
+        connection = sqlite3.connect(DB_PATH)
+        cursor = connection.cursor()
+
+        select_query = f'SELECT COUNT(*) FROM transactions WHERE id = ?'
+        values = (id_transaction,)
+        cursor.execute(select_query, values)
+        count = cursor.fetchone()[0]
+        return count > 0 
+    except Exception as error:
+        logging.error(f'Ошибка при проверки существования транзакций: {error}')
+        return False
+    finally:
+        connection.close()
+
+# функция для подсчета баланса
+def general_balance ():
+    transactions = get_transactions()
+    nixao=[]
+    for transaction in transactions:
+        nixao.append(transaction[1])
+    balance = sum(nixao)
+    return balance
+        
 
 
         

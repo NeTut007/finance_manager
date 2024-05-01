@@ -75,3 +75,11 @@ telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsucc
 
 2024-04-29 17:18:55,974:ERROR:Был использован не правильный тип данных: could not convert string to float: 'jkj'
 2024-04-29 17:19:06,189:ERROR:Был использован не правильный тип данных: could not convert string to float: '/set_budget'
+2024-05-01 17:19:29,388:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
+2024-05-01 17:19:59,456:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
+2024-05-01 17:20:03,457:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
+2024-05-01 17:23:24,863:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
+2024-05-01 17:24:46,527:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
+2024-05-01 17:28:48,741:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
+2024-05-01 17:29:08,600:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
+2024-05-01 17:32:22,225:ERROR:Ошибка при проверки существования транзакций: parameters are of unsupported type

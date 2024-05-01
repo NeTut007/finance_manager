@@ -133,10 +133,10 @@ def show_transaction(message:types.Message):
         response = 'Список всех транзакций: \n'
         for transaction in transactions:
             transaction = list(transaction)
-            response += f'ID: {transaction[0]} amount:{transaction[1]} category: {transaction[2]}, date: {transaction[3]}\n'
+            response += f'ID: {transaction[0]}, amount: {transaction[1]}, category: {transaction[2]}, date: {transaction[3]}\n'
         bot.send_message(
-            chat_id=message.chat.id,
-            text=response
+            chat_id = message.chat.id,
+            text = response
         )
     else:
         bot.send_message(
@@ -144,12 +144,91 @@ def show_transaction(message:types.Message):
             text=f'Нет транзакций🎂'
         )
 
+@bot.message_handler(commands=['show_budgets'])
+def show_budget(message:types.Message):
+    budgets = db.get_budgets()
+    if budgets:
+        response = 'Список всех бюджетов: \n'
+        for budget in budgets:
+            budget = list(budget)
+            response +=f'ID: {budget[0]}, amount: {budget[1]}, category: {budget[2]}\n'
+        bot.send_message(
+            chat_id = message.chat.id,
+            text = response
+        )
+    else:
+        bot.send_message(
+            chat_id = message.chat.id,
+            text = 'Нет бюджетов🎶'
+        )
+
+@bot.message_handler(commands = ['update_transactions'])
+def update_transaction(message:types.Message):
+    nixao = bot.send_message(
+        chat_id = message.chat.id,
+        text = f'Введите ID транзакции'
+    )
+    bot.register_next_step_handler(nixao, update_transaction_step_1)
+
+def update_transaction_step_1(message:types.Message):
+    transaction_id = int(message.text)
+    if db.check_id_trasaction(transaction_id):
+        am = bot.send_message(
+            chat_id = message.chat.id,
+            text = 'Введите новую сумму'
+        )
+        bot.register_next_step_handler(am, update_transaction_step_2, transaction_id)
+    else:
+        bot.send_message(
+            chat_id = message.chat.id,
+            text = 'Под таким ID транзакции нет'
+        )
+
+def update_transaction_step_2(message:types.Message, transaction_id):
+    try:
+        transaction_amount = float(message.text)
+        am = bot.send_message(
+            chat_id = message.chat.id,
+            text = 'Введите новую категорию'
+        )
+        bot.register_next_step_handler(am, update_transaction_step_3, transaction_id, transaction_amount)
+    except ValueError:
+        am = bot.send_message(
+            chat_id = message.chat.id,
+            text = 'Пожалуйста введите числовое значение для суммы'
+        )
+        bot.register_next_step_handler(am, update_transaction_step_2, transaction_id)
+
+def update_transaction_step_3(message:types.Message, transaction_id, transaction_amount):
+    transaction_category = message.text
+    db.update_transactions(transaction_id, transaction_amount, transaction_category)
+    bot.send_message(
+    chat_id = message.chat.id,
+    text = f'транзакция id:{transaction_id} успешно обновлена'
+    )
+
+@bot.message_handler(commands = ['balance'])
+def show_balance(message:types.Message):
+    balance = db.general_balance()
+    bot.send_message(
+        chat_id = message.chat.id,
+        text = f'Вот ваш баланс✨: {balance} руб'
+    )
+
+
+    
+
+
+        
 
 
 
-@bot.message_handler(func=lambda message: True)
-def Echo(message):
-    bot.reply_to(message, 'Такого нету😁')
+
+
+
+# @bot.message_handler(func=lambda message: True)
+# def Echo(message):
+    # bot.reply_to(message, 'Такого нету😁')
 
 
 
