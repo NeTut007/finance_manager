@@ -4,6 +4,7 @@ import settings
 import db
 import logging
 from datetime import datetime
+import markups
 
 bot = telebot.TeleBot(settings.BOT_TOKEN)
 
@@ -55,9 +56,9 @@ def choose_category(message:types.Message):
         amount = float(message.text)
         am = bot.send_message(
             chat_id=message.chat.id,
-            text='Введите категорию транзакции'
+            text='Введите категорию транзакции или выберите из списка',
+            reply_markup=markups.create_category_keyboard(amount)
         )
-        bot.register_next_step_handler(am, category_step, amount)
     except Exception as error:
         logging.error(f'Пожалуста введите числовое значение для суммы: {error}')
         am = bot.send_message(
@@ -66,10 +67,13 @@ def choose_category(message:types.Message):
         )
         bot.register_next_step_handler(am, choose_category)
 
-def category_step(message:types.Message, amount):
-    category = message.text
-    add_transaction(message, amount, category)
-  
+@bot.callback_query_handler(func=lambda call:True)
+def category_step_callback(call):
+    data = call.data.split(':')
+    category = data[0]
+    amount = float(data[1])
+    add_transaction(call.message, amount, category)
+
 def add_transaction(message:types.Message, amount, category):
     try:
         months = {
@@ -214,6 +218,8 @@ def show_balance(message:types.Message):
         chat_id = message.chat.id,
         text = f'Вот ваш баланс✨: {balance} руб'
     )
+
+
 
 
     

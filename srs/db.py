@@ -220,6 +220,19 @@ def general_balance ():
         nixao.append(transaction[1])
     balance = sum(nixao)
     return balance
+
+# получать транзакции
+def get_categories():
+    try:
+        connection = sqlite3.connect(DB_PATH)
+        cursor = connection.cursor()
+
+        select_query = f'SELECT DISTINCT category FROM transactions'
+        cursor.execute(select_query)
+        categories = [row[0] for row in cursor.fetchall()]
+    finally:
+        connection.close()
+    return categories
         
 
 
