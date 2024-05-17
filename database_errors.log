@@ -191,3 +191,107 @@ Traceback (most recent call last):
     raise ApiTelegramException(method_name, result, result_json)
 telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
 
+2024-05-17 18:45:03,537:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:45:03,540:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 1141, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 149, in raise_exceptions
+    raise self.exception_info
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 92, in run
+    task(*args, **kwargs)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 7868, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Denis\Documents\GitHub\Fin_man_Gleb\finance_manager\srs\bot.py", line 78, in category_step_callback
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 2696, in send_video
+    apihelper.send_video(
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 710, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 164, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 191, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
+2024-05-17 18:45:53,093:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:45:53,096:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 1141, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 149, in raise_exceptions
+    raise self.exception_info
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 92, in run
+    task(*args, **kwargs)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 7868, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Denis\Documents\GitHub\Fin_man_Gleb\finance_manager\srs\bot.py", line 78, in category_step_callback
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 2696, in send_video
+    apihelper.send_video(
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 710, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 164, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 191, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
+2024-05-17 18:50:22,177:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:50:22,179:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 1141, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 149, in raise_exceptions
+    raise self.exception_info
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 92, in run
+    task(*args, **kwargs)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 7868, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Denis\Documents\GitHub\Fin_man_Gleb\finance_manager\srs\bot.py", line 81, in category_step_callback
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 2696, in send_video
+    apihelper.send_video(
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 710, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 164, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 191, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
+2024-05-17 18:52:37,899:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:52:37,903:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 1141, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 149, in raise_exceptions
+    raise self.exception_info
+  File "c:\Python312\Lib\site-packages\telebot\util.py", line 92, in run
+    task(*args, **kwargs)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 7868, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Denis\Documents\GitHub\Fin_man_Gleb\finance_manager\srs\bot.py", line 81, in category_step_callback
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+  File "c:\Python312\Lib\site-packages\telebot\__init__.py", line 2696, in send_video
+    apihelper.send_video(
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 710, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 164, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Python312\Lib\site-packages\telebot\apihelper.py", line 191, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
