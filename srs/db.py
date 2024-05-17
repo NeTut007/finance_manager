@@ -233,6 +233,20 @@ def get_categories():
     finally:
         connection.close()
     return categories
+
+#  получать категории бюджетов
+def get_categories_for_budget():
+    try:
+        connection = sqlite3.connect(DB_PATH)
+        cursor = connection.cursor()
+
+
+        select_query = f'SELECT category FROM transactions'
+        cursor.execute(select_query)
+        categories = [row[0] for row in cursor.fetchall()]
+    finally:
+        connection.close()
+    return categories
         
 
 

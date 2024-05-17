@@ -74,6 +74,8 @@ def category_step_callback(call):
     amount = float(data[1])
     add_transaction(call.message, amount, category)
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
+    video_URL = 'C:\\Users\\Глеб\\Documents\\GitHub\\finance_manager\\media\\monkey.webm'
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
 
 def add_transaction(message:types.Message, amount, category):
     try:
@@ -88,8 +90,7 @@ def add_transaction(message:types.Message, amount, category):
         date = now.strftime(f'%d {month} %Y, %H:%M')
         db.create_transactions(amount, category, date) 
         bot.send_message(message.chat.id, 'Транзакция добавлена(☞ﾟヮﾟ)☞')
-        video_URL = r'C:\Users\Глеб\Documents\GitHub\finance_manager\media\monkey.webm'
-        bot.send_video(chat_id=message.chat.id, video=video_URL)
+       
     except Exception as error:
         logging.error(f'Ошибка при добавлении транзакции: {error}')
         bot.send_message(message.chat.id, 'Не верный формат даты')

@@ -9,3 +9,8 @@ def create_category_keyboard(amount):
         button = types.InlineKeyboardButton(category, callback_data=callback_data)
         keyboard.add(button)
     return keyboard
+
+def create_category_keyboard_for_budgets(amount):
+    categories = db.get_categories()
+    keyboard = types.InLinekeyboardmarkup()
+    

@@ -83,3 +83,111 @@ telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsucc
 2024-05-01 17:28:48,741:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
 2024-05-01 17:29:08,600:ERROR:Ошибка при проверки существования транзакций: near "transaction": syntax error
 2024-05-01 17:32:22,225:ERROR:Ошибка при проверки существования транзакций: parameters are of unsupported type
+2024-05-15 15:01:34,448:ERROR:Ошибка при добавлении транзакции: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:29:28,410:ERROR:Ошибка при добавлении транзакции: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:31:20,782:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:31:20,784:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 93, in run
+    task(*args, **kwargs)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 8404, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 75, in category_step_callback
+    add_transaction(call.message, amount, category)
+  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 92, in add_transaction
+    bot.send_video(chat_id=message.chat.id, video=video_URL)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 2793, in send_video
+    apihelper.send_video(
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 739, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 167, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 194, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
+2024-05-17 18:33:37,100:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:33:37,102:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 93, in run
+    task(*args, **kwargs)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 8404, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 78, in category_step_callback
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 2793, in send_video
+    apihelper.send_video(
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 739, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 167, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 194, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
+2024-05-17 18:34:52,672:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:34:52,674:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 93, in run
+    task(*args, **kwargs)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 8404, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 78, in category_step_callback
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 2793, in send_video
+    apihelper.send_video(
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 739, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 167, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 194, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
+2024-05-17 18:40:02,798:ERROR:Threaded polling exception: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+2024-05-17 18:40:02,800:ERROR:Exception traceback:
+Traceback (most recent call last):
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 1206, in __threaded_polling
+    self.worker_pool.raise_exceptions()
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 150, in raise_exceptions
+    raise self.exception_info
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\util.py", line 93, in run
+    task(*args, **kwargs)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 8404, in _run_middlewares_and_handler
+    result = handler['function'](message)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\Documents\GitHub\finance_manager\srs\bot.py", line 78, in category_step_callback
+    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\__init__.py", line 2793, in send_video
+    apihelper.send_video(
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 739, in send_video
+    return _make_request(token, method_url, params=payload, files=files, method='post')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 167, in _make_request
+    json_result = _check_result(method_name, result)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Глеб\AppData\Roaming\Python\Python312\site-packages\telebot\apihelper.py", line 194, in _check_result
+    raise ApiTelegramException(method_name, result, result_json)
+telebot.apihelper.ApiTelegramException: A request to the Telegram API was unsuccessful. Error code: 400. Description: Bad Request: invalid file HTTP URL specified: Wrong port number specified in the URL
+
