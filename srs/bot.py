@@ -18,7 +18,7 @@ def send_welcome(message:types.Message):
     db.insert_user(message.from_user.username, message.from_user.id)
 
 @bot.message_handler(commands=['help'])
-def send_help(message):
+def send_help(message:types.Message):
     help_text = """
     Доступные команды:
 /start - начать работу с ботом🐱‍🐉
@@ -74,8 +74,9 @@ def category_step_callback(call):
     amount = float(data[1])
     add_transaction(call.message, amount, category)
     bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=None)
-    video_URL = 'C:\\Users\\Глеб\\Documents\\GitHub\\finance_manager\\media\\monkey.webm'
-    bot.send_video(chat_id=call.message.chat.id, video=video_URL)
+    video_path = r'C:\Users\Denis\Documents\GitHub\Fin_man_Gleb\finance_manager\srs\monkey.mp4'
+    with open(video_path, 'rb') as video:
+        bot.send_video(chat_id=call.message.chat.id, video=video)
 
 def add_transaction(message:types.Message, amount, category):
     try:
