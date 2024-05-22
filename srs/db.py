@@ -2,32 +2,20 @@ import sqlite3
 import os
 import logging
 
-DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'bot.db')
-LOG_PATH = os.path.join(os.path.dirname(__file__), '..', 'database_errors.log')
+# Определение пути к файлам базы данных и лога
+DB_PATH = os.path.join(os.path.dirname(__file__),'..', 'bot.db')
+LOG_PATH = os.path.join(os.path.dirname(__file__),'..', 'database_errors.log')
 
+# Настройка логирования
 logging.basicConfig(filename=LOG_PATH, level=logging.ERROR, 
                     format='%(asctime)s:%(levelname)s:%(message)s')
 
-# функция для создания таблиц
-def create_db():
+# Функция для создная таблицы с пользователями
+def create_table_users():
     try:
         connection = sqlite3.connect(DB_PATH)
         cursor = connection.cursor()
-        table_transaction = '''
-            CREATE TABLE IF NOT EXISTS transactions(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            amount REAL NOT NULL,
-            category TEXT NOT NULL,
-            date TEXT NOT NULL
-            )
-            '''
-        table_budgets = '''
-            CREATE TABLE IF NOT EXISTS budgets(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            amount REAL NOT NULL,
-            category TEXT NOT NULL
-            ) 
-            '''
+
         create_table_query = '''
             CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -35,144 +23,172 @@ def create_db():
             user_id INTEGER NOT NULL
         );
         '''
-        cursor.execute(table_transaction)
-        cursor.execute(table_budgets)
         cursor.execute(create_table_query)
         connection.commit()
-
-    except Exception as error:
-        logging.error(f'Ошибка при создании базы данных: {error}')
-
-
+        
     finally:
         connection.close()
 
-# функция для удаления таблиц
+# Функция для создания таблиц для бюджета и транзакций в БД
+def create_db():
+    try:
+        connection = sqlite3.connect(DB_PATH)
+        cursor = connection.cursor()
+        # Создание таблицы транзакций
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS transactions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                amount REAL NOT NULL,
+                category TEXT NOT NULL,
+                date TEXT NOT NULL
+            )
+        ''')
+        # Создание таблицы бюджетов
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS budgets (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                amount REAL NOT NULL,
+                category TEXT NOT NULL
+            )
+        ''')
+        connection.commit()
+    except Exception as e:
+        logging.error(f"Ошибка при создании базы данных: {e}")
+    finally:
+        connection.close()
+
+# Функция для удаления всех таблиц из БД
 def drop_tables():
     try:
         connection = sqlite3.connect(DB_PATH)
         cursor = connection.cursor()
-        delete_table_transaction = 'DROP TABLE IF EXISTS transactions'
-        delete_table_budgets = 'DROP TABLE IF EXISTS budgets'
-        delete_table_users = 'DROP TABLE IF EXISTS users'
-        cursor.execute(delete_table_budgets)
-        cursor.execute(delete_table_transaction)
-        cursor.execute(delete_table_users)
+        # Удаление таблицы транзакций
+        cursor.execute('DROP TABLE IF EXISTS transactions;')
+        # Удаление таблицы бюджетов
+        cursor.execute('DROP TABLE IF EXISTS budgets;')
+        drop_table_query = f'DROP TABLE IF EXISTS users;'
+        cursor.execute(drop_table_query)
         connection.commit()
-    except Exception as error:
-        logging.error(f'Ошибка при удалении таблицы: {error}')
+    except Exception as e:
+        logging.error(f"Ошибка при удалении таблиц: {e}")
     finally:
         connection.close()
 
-# функция для создания транзакций
-def create_transactions(amount, category, date):
+# Функция для добавления новой транзакции
+def create_transaction(amount, category, date):
     try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        insert_transactions = 'INSERT INTO transactions(amount, category, date) VALUES (?, ?, ?)'
-        cursor.execute(insert_transactions, (amount, category, date))
-        connection.commit()
-    except Exception as error:
-        logging.error(f'Ошибка при добавлении транзакции: {error}')
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute('INSERT INTO transactions (amount, category, date) VALUES (?, ?, ?)', (amount, category, date))
+        conn.commit()
+    except Exception as e:
+        logging.error(f"Ошибка при добавлении транзакции: {e}")
     finally:
-        connection.close()
+        conn.close()
 
-# функция для просмтра всех транзакций
+# Функция для получения всех транзакций
 def get_transactions():
     try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        get_transaction = 'SELECT * FROM transactions'
-        cursor.execute(get_transaction)
-        ready_transaction = cursor.fetchall()
-        return ready_transaction
-    except Exception as error:
-        logging.error(f'Ошибка при получении транзакции: {error}')
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute('SELECT * FROM transactions')
+        transactions = c.fetchall()
+        return transactions
+    except Exception as e:
+        logging.error(f"Ошибка при получении транзакций: {e}")
     finally:
-        connection.close()
+        conn.close()
 
-# функция для удаления транзакций
-def delete_transactions(transaction_id):
+# Функция, проверяющая наличие транзакции в базе данных
+def check_transaction_exists(transaction_id):
     try:
-        connection=sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        cursor.execute('DELETE FROM transactions WHERE id = ?', (transaction_id))
-        connection.commit()
-    except Exception as error:
-        logging.error(f'Ошибка при удалении транзакции: {error}')
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        # Запрашиваем количество записей с указанным ID
+        c.execute('SELECT COUNT(*) FROM transactions WHERE id = ?', (transaction_id))
+        # Получаем результат запроса
+        count = c.fetchone()[0]
+        return count > 0
+    except Exception as e:
+        logging.error(f"Ошибка при проверке существования транзакции: {e}")
+        return False
     finally:
-        connection.close()
+        conn.close()
 
-# функция для изменения транзакций
-def update_transactions(transaction_id, amount = None, category = None):
+# Функция для удаления транзакции
+# Исправил функцию по удалению, чтобы она возвращала или True или False
+def delete_transaction(transaction_id):
     try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute('DELETE FROM transactions WHERE id = ?', (transaction_id,))
+        conn.commit()
+        # Проверяем, сколько строк было затронуто последним запросом
+        if c.rowcount > 0:
+            return True
+        else:
+            return False
+    except Exception as e:
+        logging.error(f"Ошибка при удалении транзакции: {e}")
+        return False
+    finally:
+        conn.close()
+
+# Функция для обновления транзакции
+def update_transaction(transaction_id, amount=None, category=None, date=None):
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
         if amount:
-            cursor.execute('UPDATE transactions SET amount = ? WHERE id = ?', (amount, transaction_id))
+            c.execute('UPDATE transactions SET amount = ? WHERE id = ?', (amount, transaction_id))
         if category:
-            cursor.execute('UPDATE transactions SET category = ? WHERE id = ?', (category, transaction_id))
-        connection.commit()
-    except Exception as error:
-        logging.error(f'Ошибка при  обновлении : {error}')
+            c.execute('UPDATE transactions SET category = ? WHERE id = ?', (category, transaction_id))
+        if date:
+            c.execute('UPDATE transactions SET date = ? WHERE id = ?', (date, transaction_id))
+        conn.commit()
+    except Exception as e:
+        logging.error(f"Ошибка при обновлении транзакции: {e}")
     finally:
-        connection.close()
+        conn.close()
 
-# функция для просмотра бюджетов
-def get_budgets():
-    try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        get_budget = 'SELECT * FROM budgets'
-        cursor.execute(get_budget)
-        ready_budget = cursor.fetchall()
-        return ready_budget
-    except Exception as error:
-        logging.error(f'Ошибка при получении бюджетов: {error}')
-    finally:
-        connection.close()
-
-# функция для удаления бюджетов
-def delete_budgets(budget_id):
-    try:
-        connection=sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        cursor.execute('DELETE FROM budgets WHERE id = ?', (budget_id))
-        connection.commit()
-    except Exception as error:
-        logging.error(f'Ошибка при удалении бюджета: {error}')
-    finally:
-        connection.close()
-
-# функция для изменения бюджета 
-def update_budgets(budget_id, amount = None, category = None):
-    try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        if amount:
-            cursor.execute('UPDATE budgets SET amount = ? WHERE id = ?', (amount, budget_id))
-        if category:
-            cursor.execute('UPDATE budgets SET category = ? WHERE id = ?', (category, budget_id))
-        connection.commit()
-    except Exception as error:
-        logging.error(f'Ошибка при  обновлении бюджета : {error}')
-    finally:
-        connection.close()
-
-# функция для установки бюджета 
+# Функция для установки бюджета
 def set_budgets(category, amount):
     try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-        set_budget = ('INSERT INTO budgets (amount, category) VALUES(?,?)')
-        cursor.execute(set_budget, (amount, category))
-        connection.commit()
-    except Exception as error:
-        logging.error(f'Ошибка при создании бюджета: {error}')
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute('INSERT INTO budgets (category, amount) VALUES (?, ?)', (category, amount))
+        conn.commit()
+    except Exception as e:
+        logging.error(f"Ошибка при установке бюджета: {e}")
     finally:
-        connection.close()
+        conn.close()
 
-# Функция, которая добавляет пользователя в базу данных
+# Функция для получения бюджета
+def get_budgets():
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute('SELECT * FROM budgets')
+        budgets = c.fetchall()
+        return budgets
+    except Exception as e:
+        logging.error(f"Ошибка при получении бюджетов: {e}")
+    finally:
+        conn.close()
+
+# Функция для обновления установленного бюджета
+def update_budget(budget_id, amount):
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        c = conn.cursor()
+        c.execute('UPDATE budgets SET amount = ? WHERE id = ?', (amount, budget_id))
+        conn.commit()
+    except Exception as e:
+        logging.error(f"Ошибка при обновлении бюджета: {e}")
+    finally:
+        conn.close()
+
+# Функция для добавления пользователя в БД при запуске бота
 def insert_user(username:str, user_id:int):
     try:
         connection = sqlite3.connect(DB_PATH)
@@ -195,91 +211,72 @@ def insert_user(username:str, user_id:int):
     finally:
         connection.close()
 
-# функция для проверки id транзакции
-def check_id_trasaction(id_transaction):
+# Функция для составления списка пользователей из базы данных и отправки в бот админу
+def get_users():
     try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        select_query = f'''
+        SELECT * FROM users;
+        '''
+        cursor.execute(select_query)
+        user_data = cursor.fetchall()
+        results = []
+        if user_data:
+            for user in user_data:
+                
+                user_info = {
+                    'id': user[0],
+                    'username': user[1],
+                    'user_id': user[2]
+                }
+                results.append(user_info)
 
-        select_query = f'SELECT COUNT(*) FROM transactions WHERE id = ?'
-        values = (id_transaction,)
-        cursor.execute(select_query, values)
-        count = cursor.fetchone()[0]
-        return count > 0 
-    except Exception as error:
-        logging.error(f'Ошибка при проверки существования транзакций: {error}')
-        return False
+            return results
     finally:
-        connection.close()
+        conn.close()
 
-# функция для подсчета баланса
-def general_balance ():
-    transactions = get_transactions()
-    nixao=[]
-    for transaction in transactions:
-        nixao.append(transaction[1])
-    balance = sum(nixao)
+def general_balance():
+    transactions = get_transactions()  # Предполагается, что функция `get_all_transactions` уже существует
+    balance = sum(i['amount'] for i in transactions)
     return balance
 
-# получать транзакции
 def get_categories():
     try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
-
-        select_query = f'SELECT DISTINCT category FROM transactions'
-        cursor.execute(select_query)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT DISTINCT category FROM transactions")
         categories = [row[0] for row in cursor.fetchall()]
     finally:
-        connection.close()
+        conn.close()
+    
     return categories
 
-#  получать категории бюджетов
-def get_categories_for_budget():
-    try:
-        connection = sqlite3.connect(DB_PATH)
-        cursor = connection.cursor()
+def get_all_categories():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT DISTINCT category FROM transactions")
+    categories = cursor.fetchall()
+    conn.close()
+    return [category[0] for category in categories]
 
+def get_all_transactions():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT date, category, amount FROM transactions")
+    transactions = cursor.fetchall()
+    conn.close()
+    return transactions
 
-        select_query = f'SELECT category FROM transactions'
-        cursor.execute(select_query)
-        categories = [row[0] for row in cursor.fetchall()]
-    finally:
-        connection.close()
-    return categories
-        
-
-
-        
-        
-
-
-
-        
-        
-        
-        
-
-# conection = sqlite3.connect('example.db')
-# cursor = conection.cursor()
-# cursor.execute('''
-# CREATE TABLE IF NOT EXISTS users (
-#                id INTEGER PRIMARY KEY,
-#                name TEXT NOT NULL,
-#                age INTEGER NOT NULL
-# )
-# ''')
- # cursor.execute("INSERT INTO users (name, age) VALUES ('Alice', 20)")
- # cursor.execute("INSERT INTO users(name, age) VALUES ('Max', 19),('Alex', 22)")
- # cursor.execute("DELETE FROM users WHERE name = 'Max'")
-
-# cursor.execute("SELECT * FROM users")
-# users = cursor.fetchall()
-# for i in users:
-#     print(i)
-# conection.commit()
-# conection.close()
+def get_transactions_by_category(category):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT date, category, amount FROM transactions WHERE category = ?", (category,))
+    transactions = cursor.fetchall()
+    conn.close()
+    return transactions
 
 if __name__ == '__main__':
     drop_tables()
     create_db()
+    create_table_users()
