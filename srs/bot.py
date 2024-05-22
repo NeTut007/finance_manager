@@ -216,13 +216,7 @@ def update_transaction_step_3(message:types.Message, transaction_id, transaction
     text = f'транзакция id:{transaction_id} успешно обновлена'
     )
 
-@bot.message_handler(commands = ['balance'])
-def show_balance(message:types.Message):
-    balance = db.general_balance()
-    bot.send_message(
-        chat_id = message.chat.id,
-        text = f'Вот ваш баланс✨: {balance} руб'
-    )
+
 
 
 
