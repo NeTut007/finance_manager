@@ -280,3 +280,4 @@ if __name__ == '__main__':
     drop_tables()
     create_db()
     create_table_users()
+    print('Привет, мой друг!')
