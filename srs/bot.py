@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 import markups
 
-bot = telebot.TeleBot(settings.BOT_TOKEN)
+bot = telebot.TeleBot(settings.BOT_TOKEN_DENIS)
 
 @bot.message_handler(commands=['start'])
 
@@ -25,9 +25,8 @@ def send_help(message):
 /help - получить список доступных команд😜
 /add_transaction - добавить новую транзакцию 😎
 /show_transaction - показать все транзакции👍
-/balance - отобразить текущий баланс😊
-/delete - удалить транзакцию по ID 🌹
-/update - обновить транзакцию ❤
+/delete_transaction - удалить транзакцию по ID 🌹
+/update_transaction - обновить транзакцию ❤
 /set_budget - установить бюджет ✔
 /show_budgets - показать все бюджеты👀
 /update_budget - обновить бюджет 😢
@@ -59,6 +58,7 @@ def choose_category(message: types.Message):
             text='Введите категорию транзакции или выберите из списка:',
             reply_markup=markups.create_inline_category_keyboard(amount)
         )
+        # process_custom_category(message,amount,)
     except Exception as error:
         logging.error(f'Пожалуйста, введите числовое значение для суммы: {error}')
         msg = bot.send_message(
@@ -67,37 +67,10 @@ def choose_category(message: types.Message):
         )
         bot.register_next_step_handler(msg, choose_category)
 
-@bot.callback_query_handler(func=lambda call: call.data.startswith('add_trans_'))
-def category_step_callback(call):
-    data = call.data.split(':')
-    category = data[0]
-    amount = float(data[1])
-    add_transaction(call.message, amount, category)
+# def process_custom_category(message: types.Message, amount):
+#     category = message.text.strip()
+#     add_transaction(message, amount, category)
 
-def category_step(message: types.Message, amount):
-    bot.register_next_step_handler(message, category_step_callback, amount)
-    
-def choose_category(message: types.Message):
-    try:
-        amount = float(message.text)
-        am = bot.send_message(
-            chat_id=message.chat.id,
-            text='Введите категорию транзакции или выберите из списка:',
-            reply_markup=markups.create_category_keyboard()
-        )
-        bot.register_next_step_handler(am, category_step, amount)
-    except Exception as error:
-        logging.error(f'Пожалуйста введите числовое значение для суммы: {error}')
-        am = bot.send_message(
-            chat_id=message.chat.id,
-            text='Пожалуйста, введите числовое значение для суммы:'
-        )
-        bot.register_next_step_handler(am, choose_category)
-
-def category_step(message:types.Message, amount):
-    category = message.text
-    add_transaction(message, amount, category)
-  
 def add_transaction(message: types.Message, amount, category):
     try:
         # Словарь для перевода месяца
@@ -116,6 +89,13 @@ def add_transaction(message: types.Message, amount, category):
     except Exception as error:
         logging.error(f'Ошибка при добавлении транзакции: {error}')
         bot.send_message(message.chat.id, 'Произошла ошибка при добавлении транзакции.')
+
+@bot.callback_query_handler(func=lambda call: call.data.startswith('add_trans_'))
+def category_step_callback(call:types.CallbackQuery):
+    data = call.data.split(':')
+    category = data[0].replace('add_trans_', '')
+    amount = float(data[1])
+    add_transaction(call.message, amount, category)
 
 # Функция для установки бюджета
 @bot.message_handler(commands=['set_budget'])   
@@ -157,25 +137,6 @@ def set_budget_final(message:types.Message, category):
         )
         bot.register_next_step_handler(am, set_budget_final, category)
 
-# Функция для показа всех транзакций, что есть сейчас в БД
-# @bot.message_handler(commands=['show_transaction'])
-# def show_transaction(message:types.Message):
-#     transactions = db.get_transactions()
-#     if transactions:
-#         response = 'Список всех транзакций: \n'
-#         for transaction in transactions:
-#             transaction = list(transaction)
-#             response += f'ID: {transaction[0]} amount:{transaction[1]} category: {transaction[2]}, date: {transaction[3]}\n'
-#         bot.send_message(
-#             chat_id=message.chat.id,
-#             text=response
-#         )
-#     else:
-#         bot.send_message(
-#             chat_id=message.chat.id,
-#             text=f'Нет транзакций🎂'
-#         )
-
 @bot.message_handler(commands=['show_transaction'])
 def show_transaction(message: types.Message):
     categories = db.get_all_categories()
@@ -196,11 +157,6 @@ def handle_transaction_category_selection(call: types.CallbackQuery):
         transactions_text = "Нет транзакций в этой категории."
 
     bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text=transactions_text)
-
-
-
-
-
 
 # Функция для обновления транзакции
 @bot.message_handler(commands=['update_transaction'])
@@ -228,13 +184,9 @@ def update_transaction_step2(message: types.Message, transaction_id):
 
 def update_transaction_step3(message: types.Message, transaction_id, new_amount):
     new_category = message.text
-    db.update_transaction(transaction_id, new_amount, new_category)  # Предполагается, что эта функция существует в db.py
+    db.update_transaction(transaction_id, new_amount, new_category) 
     bot.send_message(chat_id=message.chat.id, text=f"Транзакция ID {transaction_id} обновлена.")
 
-@bot.message_handler(commands=['balance'])
-def show_balance(message: types.Message):
-    balance = db.general_balance()
-    bot.send_message(chat_id=message.chat.id, text=f"Текущий баланс: {balance}")
 
 # @bot.message_handler(func=lambda message: True)
 # def Echo(message):

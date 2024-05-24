@@ -123,14 +123,8 @@ def delete_transaction(transaction_id):
         c = conn.cursor()
         c.execute('DELETE FROM transactions WHERE id = ?', (transaction_id,))
         conn.commit()
-        # Проверяем, сколько строк было затронуто последним запросом
-        if c.rowcount > 0:
-            return True
-        else:
-            return False
     except Exception as e:
         logging.error(f"Ошибка при удалении транзакции: {e}")
-        return False
     finally:
         conn.close()
 
@@ -247,6 +241,9 @@ def get_categories():
         cursor = conn.cursor()
         cursor.execute("SELECT DISTINCT category FROM transactions")
         categories = [row[0] for row in cursor.fetchall()]
+    except Exception as e:
+        logging.error(f"Ошибка при получении категорий: {e}")
+        categories = []
     finally:
         conn.close()
     

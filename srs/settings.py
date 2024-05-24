@@ -6,3 +6,4 @@ if os.path.exists(dotenv_path):
     dotenv.load_dotenv(dotenv_path)
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
+BOT_TOKEN_DENIS = os.getenv('BOT_TOKEN_DENIS')

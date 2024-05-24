@@ -20,9 +20,9 @@ def get_empty_markup() -> types.ReplyKeyboardMarkup:
 
 def create_inline_category_keyboard(amount):
     categories = db.get_categories()
-    keyboard = types.InlineKeyboardMarkup()
+    keyboard = types.InlineKeyboardMarkup(row_width=2)
     for category in categories:
-        callback_data = f"{category}:{amount}"
+        callback_data = f"add_trans_{category}:{amount}"
         keyboard.add(types.InlineKeyboardButton(category, callback_data=callback_data))
     return keyboard
 
