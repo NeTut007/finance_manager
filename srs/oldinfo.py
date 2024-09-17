@@ -1,4 +1,8 @@
 from datetime import datetime
+from telebot import types
+import telebot
+from settings import BOT_TOKEN
+import db
 
 transactions = []
 budget = {
@@ -87,32 +91,31 @@ check_budget('еда')
 
 
         # bot.register_next_step_handler(msg, process_custom_category, amount)
+bot = telebot.TeleBot(token=BOT_TOKEN)
+@bot.message_handler(commands=['delete_transaction'])
+def delete_transaction_command(message: types.Message):
+    # logging.info(f"Команда /delete_transaction от {message.chat.id}")
+    msg = bot.send_message(
+        chat_id=message.chat.id,
+        text='Введите ID транзакции, которую вы хотите удалить'
+    )
+    bot.register_next_step_handler(msg, process_delete_transaction)
 
-# @bot.message_handler(commands=['delete_transaction'])
-# def delete_transaction_command(message: types.Message):
-#     logging.info(f"Команда /delete_transaction от {message.chat.id}")
-#     msg = bot.send_message(
-#         chat_id=message.chat.id,
-#         text='Введите ID транзакции, которую вы хотите удалить'
-#     )
-#     bot.register_next_step_handler(msg, process_delete_transaction)
-
-# def process_delete_transaction(message: types.Message):
-#     try:
-#         transaction_id = int(message.text)
-#         logging.info(f'Удаление транзакции с ID: {transaction_id}')
-#         db.delete_transaction(transaction_id)
-#         bot.send_message(message.chat.id, f'Транзакция с ID {transaction_id} успешно удалена.')
-#     except ValueError:
-#         logging.error(f'Пожалуйста, введите числовое значение для ID транзакции')
-#         msg = bot.send_message(
-#             chat_id=message.chat.id,
-#             text='Пожалуйста, введите числовое значение для ID транзакции:'
-#         )
-#         bot.register_next_step_handler(msg, process_delete_transaction)
-#     except Exception as error:
-#         logging.error(f'Ошибка при удалении транзакции: {error}')
-#         bot.send_message(message.chat.id, 'Произошла ошибка при удалении транзакции.')
+def process_delete_transaction(message: types.Message):
+    try:
+        transaction_id = int(message.text)
+        db.delete_transaction(transaction_id)
+        bot.send_message(message.chat.id, f'Транзакция с ID {transaction_id} успешно удалена.')
+    except ValueError:
+        # logging.error(f'Пожалуйста, введите числовое значение для ID транзакции')
+        msg = bot.send_message(
+            chat_id=message.chat.id,
+            text='Пожалуйста, введите числовое значение для ID транзакции:'
+        )
+        bot.register_next_step_handler(msg, process_delete_transaction)
+    except Exception as error:
+        # logging.error(f'Ошибка при удалении транзакции: {error}')
+        bot.send_message(message.chat.id, 'Произошла ошибка при удалении транзакции.')
 
 
 
